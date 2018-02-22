@@ -46,15 +46,19 @@ GaObLEFTb | GO LEFT
 cGOcRdIdGdHdT | GO RIGHT
 
 
-시작 참고 코드)
+입력)
 
-```cpp
-#include <string>
+첫 줄에 테스트 케이스의 개수 C가 주어집니다. 각 테스트 케이스의 첫 줄에는 암호화된 메세지들의 문자열이 공백없이 주어집니다.
+```
+2
+aGOabLEFTbScTcOcPdGOdReIeGeHeT
+SfTfAfRfTSgTgOgP
+```
 
-using namespace std;
+출력)
 
-string solution(string sentence) {
-    string answer = "";
-    return answer;
-}
+각 테스트 케이스당 암호화 전의 메세지열을 한줄씩 출력합니다.
+```
+GO LEFT STOP GO RIGHT
+START STOP
 ```
