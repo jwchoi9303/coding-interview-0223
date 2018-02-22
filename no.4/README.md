@@ -46,7 +46,7 @@ GaObLEFTb | GO LEFT
 cGOcRdIdGdHdT | GO RIGHT
 
 
-시작 코드)
+시작 참고 코드)
 
 ```cpp
 #include <string>
