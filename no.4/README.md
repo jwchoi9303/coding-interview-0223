@@ -37,14 +37,15 @@ cGOcRdIdGdHdT
 
 위의 문자열을 받아서 드론이 움직일 수 있도록 원래의 커맨드를 찾아라.
 
-전송된 문자열 | 진짜 커맨드
+전송된 문자열 | 진짜 메시지
 ------------ | -------------
 kSTARTk | START
 SiTiOiP | STOP
 GaObLEFTb | GO LEFT
 cGOcRdIdGdHdT | GO RIGHT
 
-시작은 아래와 같이 할 것입니다.
+
+시작 코드)
 
 ```cpp
 #include <string>
