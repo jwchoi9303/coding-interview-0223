@@ -11,10 +11,10 @@ void parse(istream& in, vector<int>& req, int& nd) {
 	int val;
 	while (1)
 	{
-		cin >> val;
+		in >> val;
 		RUNTIME_ASSERT(val >= 0, "invalid negative input given: " << val);
 		req.push_back(val);
-		if (cin.get() == '\n') break;
+		if (in.get() == '\n') break;
 	}
 }
 

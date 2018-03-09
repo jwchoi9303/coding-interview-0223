@@ -6,7 +6,9 @@ struct Node
 {
 	Node() : data(-1), next(NULL) {}
 	Node(int d) : data(d), next(NULL) {}
-
+	~Node() {
+		if (next) delete next;
+	}
 	void set_next( Node* n) { next = n; }
 
 	int data;
@@ -42,6 +44,7 @@ int main(int argc, char* argv[]) try
 	Node *head = NULL;
 	create_linked_list(heights, &head);
 	PrintReverse(head);
+	delete head;
 }
 catch (exception& e) {
 	cout << e.what() << endl;

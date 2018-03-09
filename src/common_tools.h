@@ -59,12 +59,12 @@ template<typename entry_type>
 ostream& operator << (ostream& os, const vector<entry_type>& vec) {
 	if (vec.size() == 0) { os << "[ ]"; return os; }
 	else {
-		//os << "[ ";
+		os << "[";
 		for (unsigned long i = 0; i < vec.size(); ++i) {
-			if (i != 0) os << " ";
+			if (i != 0) os << ", ";
 			os << vec[i];
 		}
-		//os << " ]";
+		os << "]";
 		return os;
 	}
 }
@@ -76,14 +76,50 @@ string stringify(const T& obj) {
 	return sout.str();
 }
 
+class point {
+public:
+	point() : _x(0), _y(0) {}
+	point(long xx, long yy) : _x(xx), _y(yy) {}
+
+	const long& x() const { return _x; }
+
+	const long& y() const { return _y; }
+
+	long& x() { return _x; }
+
+	long& y() { return _y; }
+
+private:
+	long _x, _y;
+};
+
+ostream& operator << (ostream& os, const point& p) {
+	os << "[" << p.x() << ", " << p.y() << "]"; return os;
+}
+
 template<typename T>
 class table {
 public:
 
 	table(){}
 
+	table(const vector<vector<T>>& data) : rows(data) {
+#ifdef _DEBUG
+		for (auto row : rows) {
+			RUNTIME_ASSERT(row.size() == rows.front().size(), "inconsistent row size");
+	}
+#endif
+	}
+
 	table(unsigned long nr, unsigned long nc) {
 		set_size(nr, nc);
+	}
+
+	table(unsigned long nr, unsigned long nc, const T& val) {
+		set_size(nr, nc);
+		for (unsigned long r = 0; r < nr; ++r)
+			for (unsigned long c = 0; c < nc; ++c)
+				rows[r][c] = val;
 	}
 
 	void set_size(unsigned long nr, unsigned long nc) {
@@ -98,20 +134,46 @@ public:
 		else return 0;
 	}
 
-	const T& operator() (long r, long c) const {
-		RUNTIME_ASSERT(r < this->nr() || c < this->nc(),
+	bool contains(const point& p) const {
+		return p.x() >= 0 && p.x() < this->nr() && p.y() >= 0 && p.y() < this->nc();
+	}
+
+	void set(const point& p, const T& val) {
+		RUNTIME_ASSERT(this->contains(p),
+			"this object doesn't contain the given point"
+			<< "\n\t this->nr(): " << this->nr()
+			<< "\n\t this->nc(): " << this->nc()
+			<< "\n\t p.x(): " << p.x()
+			<< "\n\t p.y(): " << p.y()
+			);
+		rows[p.x()][p.y()] = val;
+	}
+
+	T operator() (const point& p) const {
+		RUNTIME_ASSERT(this->contains(p),
+			"this object doesn't contain the given point"
+			<< "\n\t this->nr(): " << this->nr()
+			<< "\n\t this->nc(): " << this->nc()
+			<< "\n\t p.x(): " << p.x()
+			<< "\n\t p.y(): " << p.y()
+			);
+		return rows[p.x()][p.y()];
+	}
+
+	void set(const long& r, const long& c, const T& val) {
+		RUNTIME_ASSERT(r < this->nr() && c < this->nc(),
 			"const " << typeid(T).name() << "& table<" << typeid(T).name() << ">::operator(): index out of range"
 			<< "\n\t r: " << r
 			<< "\n\t c: " << c
 			<< "\n\t this->nr(): " << this->nr()
 			<< "\n\t this->nc(): " << this->nc()
 			);
-		return rows[r][c];
+		rows[r][c] = val;
 	}
 
-	T& operator() (long r, long c) {
-		RUNTIME_ASSERT(r < this->nr() || c < this->nc(),
-			typeid(T).name() << "& table<" << typeid(T).name() << ">::operator(): index out of range"
+	T operator() (long r, long c) const {
+		RUNTIME_ASSERT(r < this->nr() && c < this->nc(),
+			"const " << typeid(T).name() << "& table<" << typeid(T).name() << ">::operator(): index out of range"
 			<< "\n\t r: " << r
 			<< "\n\t c: " << c
 			<< "\n\t this->nr(): " << this->nr()
@@ -151,7 +213,10 @@ private:
 
 template<typename T>
 ostream& operator << (ostream& os, const table<T>& t) {
-	os << t.rows;
+	os << endl;
+	for (auto row : t.rows) {
+		os << row << endl;
+	}
 	return os;
 }
 
